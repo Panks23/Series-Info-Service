@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,18 @@ public class SeriesResource {
 	@GetMapping("/all")
 	public Map<String, Series> findAll(){
 		return seriesRepoImpl.findAll();
+	}
+	
+	@PutMapping("/update/{id}/{series}/{genre}")
+	public void update(@PathVariable("id") final String id,
+			@PathVariable("series") final String series,
+			@PathVariable("genre") final String genre) {
+		seriesRepoImpl.update(new Series(id, series, genre, 4.00, "Thrilling Show", 40));
+	}
+	
+	@GetMapping("/delete/{id}")
+	public Map<String, Series> deleteAll(@PathVariable("id") final String id) {
+		return seriesRepoImpl.delete(id);
 	}
 	
 }

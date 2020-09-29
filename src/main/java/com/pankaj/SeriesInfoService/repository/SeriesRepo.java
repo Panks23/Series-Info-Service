@@ -11,6 +11,6 @@ public interface SeriesRepo {
 	Map<String, Series> findAll();
 	Series findById(String id);
 	void update(Series series);
-	void delete(String id);
+	Map<String, Series> delete(String id);
 
 }

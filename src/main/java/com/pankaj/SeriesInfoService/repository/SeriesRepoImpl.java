@@ -44,8 +44,9 @@ public class SeriesRepoImpl implements SeriesRepo {
 	}
 
 	@Override
-	public void delete(String id) {
+	public Map<String, Series> delete(String id) {
 		hashOperations.delete("SERIES", id);
+		return hashOperations.entries("SERIES");
 	}
 
 }
