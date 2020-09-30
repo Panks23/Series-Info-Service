@@ -25,6 +25,9 @@ public class Series implements Serializable {
 		this.numberOfSeason = numberOfSeason;
 	}
 	
+	public Series() {
+		
+	}
 	
 	public String getId() {
 		return id;

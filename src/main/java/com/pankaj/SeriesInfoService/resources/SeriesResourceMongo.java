@@ -2,11 +2,15 @@ package com.pankaj.SeriesInfoService.resources;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,34 +28,35 @@ public class SeriesResourceMongo {
 	}
 	
 	
-	@PostMapping("/add/{id}/{series}/{genre}")
-	public void addUser(@PathVariable("id") final String id,
-						@PathVariable("series") final String series,
-						@PathVariable("genre") final String genre) {
-		seriesMongoRepository.save(new Series(id, series, genre, 4.00, "Chilling show", 20));
+	@PostMapping
+	@Cacheable(value="series", key="#series.id", unless = "#series.rating < 3")
+	public Series addSeries(@RequestBody Series series) {
+		return seriesMongoRepository.save(series);
 	}
 	
-	@GetMapping("/all")
+	@GetMapping
 	public List<Series> getAll(){
 		return seriesMongoRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
+	@Cacheable(value="series", key="#id", unless = "#result.rating < 3")
 	public Series getSeriesById(@PathVariable("id") final String id) {
 		return seriesMongoRepository.findById(id).get();
 	}
 	
 	
-	@PutMapping("/add/{id}/{series}/{genre}")
-	public void updateUser(@PathVariable("id") final String id,
-						@PathVariable("series") final String series,
-						@PathVariable("genre") final String genre) {
-		seriesMongoRepository.save(new Series(id, series, genre, 4.00, "Best Sci-Fi", 20));
+	@PutMapping
+	@CachePut(key = "#series.id", value="series", unless="#series.rating < 3")
+	public Series updateSeries(@RequestBody Series series) {
+		return seriesMongoRepository.save(series);
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}")
+	@CacheEvict(value="series", key="#id")
 	public List<Series> deleteSeriesById(@PathVariable("id") final String id){
 		seriesMongoRepository.deleteById(id);
 		return seriesMongoRepository.findAll();
 	}
+	
 }

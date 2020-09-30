@@ -2,6 +2,7 @@ package com.pankaj.SeriesInfoService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,6 +12,7 @@ import com.pankaj.SeriesInfoService.model.Series;
 import com.pankaj.SeriesInfoService.model.User;
 
 @SpringBootApplication
+@EnableCaching
 public class SeriesInfoServiceApplication {
 	
 	@Bean
