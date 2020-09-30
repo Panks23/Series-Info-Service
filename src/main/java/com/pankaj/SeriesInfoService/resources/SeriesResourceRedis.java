@@ -35,6 +35,11 @@ public class SeriesResourceRedis {
 		return seriesRepoImpl.findAll();
 	}
 	
+	@GetMapping("/{id}")
+	public Series getSeriesById(@PathVariable("id") final String id) {
+		return seriesRepoImpl.findById(id);
+	}
+	
 	@PutMapping("/update/{id}/{series}/{genre}")
 	public void update(@PathVariable("id") final String id,
 			@PathVariable("series") final String series,
