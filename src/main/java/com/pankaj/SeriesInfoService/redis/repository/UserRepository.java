@@ -1,4 +1,4 @@
-package com.pankaj.SeriesInfoService.repository;
+package com.pankaj.SeriesInfoService.redis.repository;
 
 import java.util.Map;
 

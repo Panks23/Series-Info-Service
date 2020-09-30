@@ -2,6 +2,9 @@ package com.pankaj.SeriesInfoService.model;
 
 import java.io.Serializable;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Series implements Serializable {
 	
 	private String id;

@@ -2,12 +2,15 @@ package com.pankaj.SeriesInfoService.model;
 
 import java.io.Serializable;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class User implements Serializable{
 	
 	private  String id;
 	private String name;
 	private Long salary;
-	
+
 	
 	public User(String id, String name, Long salary) {
 		super();

@@ -1,4 +1,4 @@
-package com.pankaj.SeriesInfoService.repository;
+package com.pankaj.SeriesInfoService.redis.repository;
 
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class UserRepositoryImpl implements UserRepository{
 	private RedisTemplate<String, User> redisTemplate;
 	
 	private HashOperations<String, String, User> hashOperations;
-	
+
 
 	public UserRepositoryImpl(RedisTemplate<String, User> redisTemplate) {
 		this.redisTemplate = redisTemplate;

@@ -1,5 +1,6 @@
 package com.pankaj.SeriesInfoService.resources;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pankaj.SeriesInfoService.model.User;
-import com.pankaj.SeriesInfoService.repository.UserRepository;
+import com.pankaj.SeriesInfoService.mongo.repository.UsersRepository;
+import com.pankaj.SeriesInfoService.redis.repository.UserRepository;
 
 @RestController
 @RequestMapping("/rest/user")
@@ -17,9 +19,11 @@ public class UserResource {
 	
 	private UserRepository userRepository;
 	
+	private UsersRepository usersRepository;
 	
-	public UserResource(UserRepository userRepository) {
+	public UserResource(UserRepository userRepository, UsersRepository usersRepository) {
 		this.userRepository = userRepository;
+		this.usersRepository = usersRepository;
 	}
 	
 	@PostMapping("/add/{id}/{name}")
@@ -31,6 +35,17 @@ public class UserResource {
 	@GetMapping("/all")
 	public Map<String, User> findAll(){
 		return userRepository.findAll();
+	}
+	
+	@GetMapping("/mongo/all")
+	public List<User> getAll(){
+		return usersRepository.findAll();
+	}
+	
+	@PostMapping("/mongo/add/{id}/{name}")
+	public void addUser(@PathVariable("id") final String id,
+						@PathVariable("name") final String name) {
+		usersRepository.save(new User(id, name,  20000L));
 	}
 	
 

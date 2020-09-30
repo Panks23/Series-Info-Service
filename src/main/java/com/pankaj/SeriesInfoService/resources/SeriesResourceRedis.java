@@ -2,6 +2,7 @@ package com.pankaj.SeriesInfoService.resources;
 
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,16 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pankaj.SeriesInfoService.model.Series;
-import com.pankaj.SeriesInfoService.model.User;
-import com.pankaj.SeriesInfoService.repository.SeriesRepoImpl;
+import com.pankaj.SeriesInfoService.redis.repository.SeriesRepoImpl;
 
 @RestController
 @RequestMapping("/series")
-public class SeriesResource {
+public class SeriesResourceRedis {
 	
 	private SeriesRepoImpl seriesRepoImpl;
 	
-	public SeriesResource(SeriesRepoImpl seriesRepoImpl) {
+	public SeriesResourceRedis(SeriesRepoImpl seriesRepoImpl) {
 		this.seriesRepoImpl = seriesRepoImpl;
 	}
 	
@@ -42,7 +42,7 @@ public class SeriesResource {
 		seriesRepoImpl.update(new Series(id, series, genre, 4.00, "Thrilling Show", 40));
 	}
 	
-	@GetMapping("/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public Map<String, Series> deleteAll(@PathVariable("id") final String id) {
 		return seriesRepoImpl.delete(id);
 	}
