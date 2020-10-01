@@ -3,7 +3,6 @@ package com.pankaj.SeriesInfoService.redis.repository;
 import java.util.Map;
 
 import com.pankaj.SeriesInfoService.model.Series;
-import com.pankaj.SeriesInfoService.model.User;
 
 public interface SeriesRepo {
 	

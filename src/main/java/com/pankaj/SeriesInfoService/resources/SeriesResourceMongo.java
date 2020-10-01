@@ -2,6 +2,9 @@ package com.pankaj.SeriesInfoService.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -103,6 +106,26 @@ public class SeriesResourceMongo {
 		listOfSeries.addAll(getSeriesByGenre(genre));
 		return listOfSeries;
 	}
+	
+	@GetMapping(path="/series/async", params= {"rating", "genre"})
+	public List<Series> getSeriesByFilteringAsync(@RequestParam("rating") final Double rating,
+			@RequestParam("genre") final String genre){
+		List<Series> listOfSeries = new ArrayList<>();
+		Future<List<Series>> futureRating = CompletableFuture.supplyAsync(
+				() -> {return getSeriesByRating(rating);});
+		Future<List<Series>> futureGenre = CompletableFuture.supplyAsync(
+				() -> {return getSeriesByGenre(genre);});	
+		try {
+			listOfSeries.addAll(futureRating.get());
+			listOfSeries.addAll(futureGenre.get());
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return listOfSeries;
+	}
+	
+	
 	
 	
 }

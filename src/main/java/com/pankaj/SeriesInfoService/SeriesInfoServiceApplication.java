@@ -9,25 +9,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 
 import com.pankaj.SeriesInfoService.model.Series;
-import com.pankaj.SeriesInfoService.model.User;
 
 @SpringBootApplication
 @EnableCaching
 public class SeriesInfoServiceApplication {
-	
+
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
 		return new JedisConnectionFactory();
 	}
 	
-	@Bean
-	RedisTemplate<String, User> redisTemplate(){
-		final RedisTemplate<String, User> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setConnectionFactory(jedisConnectionFactory());
-		redisTemplate.setValueSerializer(new GenericToStringSerializer<User>(User.class));
-		return redisTemplate;
-		
-	}
 	@Bean
 	RedisTemplate<String, Series> redisTemplateSeries(){
 		final RedisTemplate<String, Series> redisTemplate = new RedisTemplate<>();
