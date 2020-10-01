@@ -22,6 +22,7 @@ public class UserResource {
 	
 	private UsersRepository usersRepository;
 	
+
 	public UserResource(UserRepository userRepository, UsersRepository usersRepository) {
 		this.userRepository = userRepository;
 		this.usersRepository = usersRepository;
