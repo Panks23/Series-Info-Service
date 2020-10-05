@@ -14,6 +14,7 @@ import com.pankaj.SeriesInfoService.model.Series;
 @EnableCaching
 public class SeriesInfoServiceApplication {
 
+
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
 		return new JedisConnectionFactory();

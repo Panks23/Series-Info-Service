@@ -12,7 +12,7 @@ import com.pankaj.SeriesInfoService.model.Series;
 @Repository
 public class SeriesRepoImpl implements SeriesRepo {
    
-	
+
 	private RedisTemplate<String, Series> redisTemplateSeries;
 	
 	private HashOperations<String, String, Series> hashOperations;
