@@ -101,7 +101,7 @@ public class SeriesResourceMongo {
 	@GetMapping(path="/series", params= {"rating", "genre"})
 	public List<Series> getSeriesByFiltering(@RequestParam("rating") final Double rating,
 			@RequestParam("genre") final String genre){
-		return getSeriesByFiltering(rating, genre);
+		return seriesService.getSeriesByFiltering(rating, genre);
 	}
 
 	@DeleteMapping("/series/delete/all")
