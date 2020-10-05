@@ -82,26 +82,30 @@ public class SeriesResourceMongo {
 		return seriesService.getAllSeriesSortedByRating(sort);
 	}
 	
-	@GetMapping(path="/series", params="genre")
-	public List<Series> getSeriesByGenre(@RequestParam("genre") final String genre){
-		return seriesService.getSeriesByGenre(genre);
+	@GetMapping(path="/series", params={"genre", "pageNo", "size"})
+	public List<Series> getSeriesByGenre(@RequestParam("genre") final String genre,
+										 @RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
+		return seriesService.getSeriesByGenre(genre, pageNo, size);
 	}
 	
-	@GetMapping(path="/series", params="rating")
-	public List<Series> getSeriesByRating(@RequestParam("rating") final Double rating){
-		return seriesService.getSeriesByRating(rating);
+	@GetMapping(path="/series", params={"rating", "pageNo", "size"})
+	public List<Series> getSeriesByRating(@RequestParam("rating") final Double rating,
+										  @RequestParam("pageNo") int pageNo,  @RequestParam("size") int size){
+		return seriesService.getSeriesByRating(rating, pageNo, size);
 	}
-	
-	@GetMapping(path="/series", params={"fromRating","toRating"})
+
+	@GetMapping(path="/series", params={"fromRating","toRating", "pageNo", "size"})
 	public List<Series> getSeriesByRatingRange(@RequestParam("fromRating") final Double fromRating,
-			@RequestParam("toRating") final Double toRating){
-		return seriesService.getSeriesByRatingRange(fromRating, toRating);
+			@RequestParam("toRating") final Double toRating,
+			@RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
+		return seriesService.getSeriesByRatingRange(fromRating, toRating, pageNo, size);
 	}
 	
-	@GetMapping(path="/series", params= {"rating", "genre"})
+	@GetMapping(path="/series", params= {"rating", "genre", "pageNo", "size"})
 	public List<Series> getSeriesByFiltering(@RequestParam("rating") final Double rating,
-			@RequestParam("genre") final String genre){
-		return seriesService.getSeriesByFiltering(rating, genre);
+			@RequestParam("genre") final String genre,
+	 		@RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
+		return seriesService.getSeriesByFiltering(rating, genre, pageNo, size);
 	}
 
 	@DeleteMapping("/series/delete/all")
@@ -110,14 +114,14 @@ public class SeriesResourceMongo {
 		seriesService.deleteAllSeries(listOfSeries);
 	}
 	
-	@GetMapping(path="/series/async", params= {"rating", "genre"})
+	@GetMapping(path="/series/async", params= {"rating", "genre", "pageNo", "size"})
 	public List<Series> getSeriesByFilteringAsync(@RequestParam("rating") final Double rating,
-			@RequestParam("genre") final String genre){
+			@RequestParam("genre") final String genre, @RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
 		List<Series> listOfSeries = new ArrayList<>();
 		Future<List<Series>> futureRating = CompletableFuture.supplyAsync(
-				() -> {return getSeriesByRating(rating);});
+				() -> {return seriesService.getSeriesByRating(rating, pageNo, size);});
 		Future<List<Series>> futureGenre = CompletableFuture.supplyAsync(
-				() -> {return getSeriesByGenre(genre);});	
+				() -> {return seriesService.getSeriesByGenre(genre, pageNo, size);});
 		try {
 			listOfSeries.addAll(futureRating.get());
 			listOfSeries.addAll(futureGenre.get());

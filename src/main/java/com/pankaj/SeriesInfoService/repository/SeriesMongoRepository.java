@@ -2,6 +2,8 @@ package com.pankaj.SeriesInfoService.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -14,8 +16,10 @@ public interface SeriesMongoRepository extends MongoRepository<Series, String>{
 
 	List<Series> findByRating(Double rating);
 
-	List<Series> findByRatingBetween(Double fromRating, Double toRating);
+	Page<Series> findByRatingBetween(Double fromRating, Double toRating, Pageable page);
 
-	List<Series> findByGenre(String genre);
+	Page<Series> findByGenre(String genre, Pageable page);
+
+	Page<Series> findByRating(Double rating, Pageable page);
 
 }

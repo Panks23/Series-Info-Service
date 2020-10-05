@@ -71,25 +71,25 @@ public class SeriesServiceImpl implements ISeriesService{
     }
 
     @Override
-    public List<Series> getSeriesByRating(Double rating) {
-        return seriesMongoRepository.findByRating(rating);
+    public List<Series> getSeriesByRating(Double rating, int pageNo, int size) {
+        return seriesMongoRepository.findByRating(rating, PageRequest.of(pageNo, size)).getContent();
     }
 
     @Override
-    public List<Series> getSeriesByGenre(String genre) {
-        return seriesMongoRepository.findByGenre(genre);
+    public List<Series> getSeriesByGenre(String genre, int pageNo, int size) {
+        return seriesMongoRepository.findByGenre(genre, PageRequest.of(pageNo, size)).getContent();
     }
 
     @Override
-    public List<Series> getSeriesByRatingRange(Double fromRating, Double toRating) {
-        return seriesMongoRepository.findByRatingBetween(fromRating, toRating);
+    public List<Series> getSeriesByRatingRange(Double fromRating, Double toRating,int pageNo, int size) {
+        return seriesMongoRepository.findByRatingBetween(fromRating, toRating, PageRequest.of(pageNo, size)).getContent();
     }
 
     @Override
-    public List<Series> getSeriesByFiltering(Double rating, String genre) {
+    public List<Series> getSeriesByFiltering(Double rating, String genre, int pageNo, int size) {
         List<Series> listOfSeries = new ArrayList<>();
-        listOfSeries.addAll(getSeriesByRating(rating));
-        listOfSeries.addAll(getSeriesByGenre(genre));
+        listOfSeries.addAll(getSeriesByRating(rating, pageNo, size));
+        listOfSeries.addAll(getSeriesByGenre(genre, pageNo, size));
         return listOfSeries;
     }
 

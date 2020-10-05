@@ -23,13 +23,13 @@ public interface ISeriesService {
 
         List<Series> getAllSeriesSortedByRating(String sort);
 
-        List<Series> getSeriesByRating(Double rating);
+        List<Series> getSeriesByRating(Double rating, int pageNo, int size);
 
-        List<Series> getSeriesByGenre(String genre);
+        List<Series> getSeriesByGenre(String genre, int pageNo, int size);
 
-        List<Series> getSeriesByRatingRange(Double fromRating, Double toRating);
+        List<Series> getSeriesByRatingRange(Double fromRating, Double toRating, int pageNo, int size);
 
-        List<Series> getSeriesByFiltering(Double rating, String genre);
+        List<Series> getSeriesByFiltering(Double rating, String genre, int pageNo, int size);
 
         void deleteAllSeries(List<Series> listOfSeries);
     }
