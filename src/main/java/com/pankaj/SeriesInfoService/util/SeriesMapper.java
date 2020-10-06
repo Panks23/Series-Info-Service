@@ -1,8 +1,10 @@
 package com.pankaj.SeriesInfoService.util;
 
 import com.pankaj.SeriesInfoService.dto.SeriesDTO;
+import com.pankaj.SeriesInfoService.dto.SeriesResponseDTO;
 import com.pankaj.SeriesInfoService.model.Series;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +39,16 @@ public class SeriesMapper {
         List<Series> listOfSeries = listOfSeriesDTO.stream().map(series ->
                 toSeries(series)).collect(Collectors.toList());
         return listOfSeries;
+    }
+
+    public static SeriesResponseDTO successListOfSeriesResponse(List<Series> listOfSeries){
+        return new SeriesResponseDTO().setStatus(200).setMessage("You Got Your Response Bois")
+                .setCount(0).setApi_element("Api_Element").setResult(toListSeriesDTO(listOfSeries));
+    }
+
+    public static SeriesResponseDTO errorListOfSeriesResponse(){
+        return new SeriesResponseDTO().setStatus(401).setMessage("Please pass valid page No. or size of your page")
+                .setCount(0).setApi_element("Api_Element").setResult(new ArrayList<>());
     }
 
 

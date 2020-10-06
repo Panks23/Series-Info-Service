@@ -2,6 +2,8 @@ package com.pankaj.SeriesInfoService.service;
 
 
 import com.pankaj.SeriesInfoService.dto.SeriesDTO;
+import com.pankaj.SeriesInfoService.dto.SeriesResponseDTO;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +15,7 @@ public interface ISeriesService {
 
         List<SeriesDTO> getAllSeries();
 
-        List<SeriesDTO> getAllSeriesByOffset(int pageNo, int size);
+        SeriesResponseDTO getAllSeriesByOffset(int pageNo, int size);
 
         Optional<SeriesDTO> getSeriesById( String id);
 

@@ -1,6 +1,7 @@
 package com.pankaj.SeriesInfoService.service;
 
 import com.pankaj.SeriesInfoService.dto.SeriesDTO;
+import com.pankaj.SeriesInfoService.dto.SeriesResponseDTO;
 import com.pankaj.SeriesInfoService.model.Series;
 import com.pankaj.SeriesInfoService.repository.SeriesMongoRepository;
 import com.pankaj.SeriesInfoService.util.SeriesMapper;
@@ -36,11 +37,11 @@ public class SeriesServiceImpl implements ISeriesService{
     }
 
     @Override
-    public List<SeriesDTO> getAllSeriesByOffset(int pageNo, int size) {
+    public SeriesResponseDTO getAllSeriesByOffset(int pageNo, int size) {
         try {
-            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
+            return SeriesMapper.successListOfSeriesResponse(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
         }catch (IllegalArgumentException illegalArgumentException){
-            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(0, 3)).getContent());
+            return SeriesMapper.errorListOfSeriesResponse();
         }
     }
 
@@ -63,11 +64,14 @@ public class SeriesServiceImpl implements ISeriesService{
     @Override
     public List<SeriesDTO> getAllSeriesSortedByRating(String sort, int pageNo, int size) {
         if(sort.equals("-rating")) {
-            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, "rating"))).getContent());
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(
+                    PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, "rating"))).getContent());
         }else if(sort.equals("rating")){
-            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size, Sort.by(Sort.Direction.ASC, "rating"))).getContent());
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(
+                    PageRequest.of(pageNo, size, Sort.by(Sort.Direction.ASC, "rating"))).getContent());
         }else {
-            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(
+                    PageRequest.of(pageNo, size)).getContent());
         }
     }
 

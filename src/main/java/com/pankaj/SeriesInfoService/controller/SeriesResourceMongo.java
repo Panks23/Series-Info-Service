@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import com.pankaj.SeriesInfoService.dto.SeriesDTO;
+import com.pankaj.SeriesInfoService.dto.SeriesResponseDTO;
 import com.pankaj.SeriesInfoService.service.ISeriesService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -51,7 +52,7 @@ public class SeriesResourceMongo {
 	}
 
 	@GetMapping(path="/series", params={"pageNo", "size"})
-	public List<SeriesDTO>  getAllSeriesByOffset(@RequestParam("pageNo") final int pageNo, @RequestParam("size") final int size){
+	public SeriesResponseDTO getAllSeriesByOffset(@RequestParam("pageNo") final int pageNo, @RequestParam("size") final int size){
 		return seriesService.getAllSeriesByOffset(pageNo, size);
 	}
 	
@@ -90,7 +91,7 @@ public class SeriesResourceMongo {
 	
 	@GetMapping(path="/series", params={"rating", "pageNo", "size"})
 	public List<SeriesDTO> getSeriesByRating(@RequestParam("rating") final Double rating,
-										  @RequestParam("pageNo") int pageNo,  @RequestParam("size") int size){
+											 @RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
 		return seriesService.getSeriesByRating(rating, pageNo, size);
 	}
 
@@ -114,20 +115,20 @@ public class SeriesResourceMongo {
 		seriesService.deleteAllSeries(listOfSeries);
 	}
 	
-	@GetMapping(path="/series/async", params= {"rating", "genre", "pageNo", "size"})
-	public List<SeriesDTO> getSeriesByFilteringAsync(@RequestParam("rating") final Double rating,
-			@RequestParam("genre") final String genre, @RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
-		List<SeriesDTO> listOfSeries = new ArrayList<>();
-		Future<List<SeriesDTO>> futureRating = CompletableFuture.supplyAsync(
-				() -> {return seriesService.getSeriesByRating(rating, pageNo, size);});
-		Future<List<SeriesDTO>> futureGenre = CompletableFuture.supplyAsync(
-				() -> {return seriesService.getSeriesByGenre(genre, pageNo, size);});
-		try {
-			listOfSeries.addAll(futureRating.get());
-			listOfSeries.addAll(futureGenre.get());
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
-		return listOfSeries;
-	}
+//	@GetMapping(path="/series/async", params= {"rating", "genre", "pageNo", "size"})
+//	public List<SeriesDTO> getSeriesByFilteringAsync(@RequestParam("rating") final Double rating,
+//			@RequestParam("genre") final String genre, @RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
+//		List<SeriesDTO> listOfSeries = new ArrayList<>();
+//		Future<List<SeriesDTO>> futureRating = CompletableFuture.supplyAsync(
+//				() -> {return seriesService.getSeriesByRating(rating, pageNo, size);});
+//		Future<List<SeriesDTO>> futureGenre = CompletableFuture.supplyAsync(
+//				() -> {return seriesService.getSeriesByGenre(genre, pageNo, size);});
+//		try {
+//			listOfSeries.addAll(futureRating.get());
+//			listOfSeries.addAll(futureGenre.get());
+//		} catch (InterruptedException | ExecutionException e) {
+//			e.printStackTrace();
+//		}
+//		return listOfSeries;
+//	}
 }
