@@ -96,7 +96,7 @@ public class SeriesResourceMongo {
 	}
 
 	@GetMapping(path="/series", params={"fromRating","toRating", "pageNo", "size"})
-	public List<SeriesDTO> getSeriesByRatingRange(@RequestParam("fromRating") final Double fromRating,
+	public SeriesResponseDTO getSeriesByRatingRange(@RequestParam("fromRating") final Double fromRating,
 			@RequestParam("toRating") final Double toRating,
 			@RequestParam("pageNo") int pageNo, @RequestParam("size") int size){
 		return seriesService.getSeriesByRatingRange(fromRating, toRating, pageNo, size);

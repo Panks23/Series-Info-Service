@@ -46,8 +46,8 @@ public class SeriesMapper {
                 .setCount(0).setApi_element("Api_Element").setResult(toListSeriesDTO(listOfSeries));
     }
 
-    public static SeriesResponseDTO errorListOfSeriesResponse(){
-        return new SeriesResponseDTO().setStatus(401).setMessage("Please pass valid page No. or size of your page")
+    public static SeriesResponseDTO errorListOfSeriesResponse(IllegalArgumentException illegalArgumentException){
+        return new SeriesResponseDTO().setStatus(401).setMessage(illegalArgumentException.getMessage())
                 .setCount(0).setApi_element("Api_Element").setResult(new ArrayList<>());
     }
 

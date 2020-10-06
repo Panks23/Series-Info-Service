@@ -41,7 +41,7 @@ public class SeriesServiceImpl implements ISeriesService{
         try {
             return SeriesMapper.successListOfSeriesResponse(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
         }catch (IllegalArgumentException illegalArgumentException){
-            return SeriesMapper.errorListOfSeriesResponse();
+            return SeriesMapper.errorListOfSeriesResponse(illegalArgumentException);
         }
     }
 
@@ -86,8 +86,13 @@ public class SeriesServiceImpl implements ISeriesService{
     }
 
     @Override
-    public List<SeriesDTO> getSeriesByRatingRange(Double fromRating, Double toRating,int pageNo, int size) {
-        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByRatingBetween(fromRating, toRating, PageRequest.of(pageNo, size)).getContent());
+    public SeriesResponseDTO getSeriesByRatingRange(Double fromRating, Double toRating,int pageNo, int size) {
+        try{
+        return SeriesMapper.successListOfSeriesResponse(seriesMongoRepository.
+                findByRatingBetween(fromRating, toRating, PageRequest.of(pageNo, size)).getContent());
+        }catch (IllegalArgumentException illegalArgumentException){
+            return SeriesMapper.errorListOfSeriesResponse(illegalArgumentException);
+        }
     }
 
     @Override

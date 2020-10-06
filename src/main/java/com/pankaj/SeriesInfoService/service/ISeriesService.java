@@ -29,7 +29,7 @@ public interface ISeriesService {
 
         List<SeriesDTO> getSeriesByGenre(String genre, int pageNo, int size);
 
-        List<SeriesDTO> getSeriesByRatingRange(Double fromRating, Double toRating, int pageNo, int size);
+        SeriesResponseDTO getSeriesByRatingRange(Double fromRating, Double toRating, int pageNo, int size);
 
         List<SeriesDTO> getSeriesByFiltering(Double rating, String genre, int pageNo, int size);
 
