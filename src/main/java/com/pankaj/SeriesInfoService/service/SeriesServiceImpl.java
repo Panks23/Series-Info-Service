@@ -1,14 +1,14 @@
 package com.pankaj.SeriesInfoService.service;
 
+import com.pankaj.SeriesInfoService.dto.SeriesDTO;
 import com.pankaj.SeriesInfoService.model.Series;
 import com.pankaj.SeriesInfoService.repository.SeriesMongoRepository;
+import com.pankaj.SeriesInfoService.util.SeriesMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
@@ -21,37 +21,38 @@ public class SeriesServiceImpl implements ISeriesService{
     }
 
     @Override
-    public void addSeries(Series series) {
-        seriesMongoRepository.save(series);
+    public void addSeries(SeriesDTO seriesDTO) {
+        seriesMongoRepository.save(SeriesMapper.toSeries(seriesDTO));
     }
 
     @Override
-    public void addAllSeries(List<Series> listOfSeries) {
-        seriesMongoRepository.saveAll(listOfSeries);
+    public void addAllSeries(List<SeriesDTO> listOfSeriesDTO) {
+        seriesMongoRepository.saveAll(SeriesMapper.toListSeries(listOfSeriesDTO));
     }
 
     @Override
-    public List<Series> getAllSeries() {
-        return seriesMongoRepository.findAll();
+    public List<SeriesDTO> getAllSeries() {
+        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll());
     }
 
     @Override
-    public List<Series> getAllSeriesByOffset(int pageNo, int size) {
+    public List<SeriesDTO> getAllSeriesByOffset(int pageNo, int size) {
         try {
-            return seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent();
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
         }catch (IllegalArgumentException illegalArgumentException){
-            return seriesMongoRepository.findAll(PageRequest.of(0, 3)).getContent();
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(0, 3)).getContent());
         }
     }
 
     @Override
-    public Optional<Series> getSeriesById(String id) {
-            return seriesMongoRepository.findById(id);
+    public Optional<SeriesDTO> getSeriesById(String id) {
+            return Optional.ofNullable(SeriesMapper.toSeriesDTO(seriesMongoRepository.findById(id).get()));
     }
 
     @Override
-    public Series updateSeries(Series series) {
-        return seriesMongoRepository.save(series);
+    public SeriesDTO updateSeries(SeriesDTO seriesDTO) {
+        Series series = SeriesMapper.toSeries(seriesDTO);
+        return SeriesMapper.toSeriesDTO(seriesMongoRepository.save(series));
     }
 
     @Override
@@ -60,41 +61,41 @@ public class SeriesServiceImpl implements ISeriesService{
     }
 
     @Override
-    public List<Series> getAllSeriesSortedByRating(String sort) {
+    public List<SeriesDTO> getAllSeriesSortedByRating(String sort, int pageNo, int size) {
         if(sort.equals("-rating")) {
-            return seriesMongoRepository.findAll(Sort.by(Sort.Direction.DESC, "rating"));
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, "rating"))).getContent());
         }else if(sort.equals("rating")){
-            return seriesMongoRepository.findAll(Sort.by(Sort.Direction.ASC, "rating"));
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size, Sort.by(Sort.Direction.ASC, "rating"))).getContent());
         }else {
-            return seriesMongoRepository.findAll();
+            return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
         }
     }
 
     @Override
-    public List<Series> getSeriesByRating(Double rating, int pageNo, int size) {
-        return seriesMongoRepository.findByRating(rating, PageRequest.of(pageNo, size)).getContent();
+    public List<SeriesDTO> getSeriesByRating(Double rating, int pageNo, int size) {
+        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByRating(rating, PageRequest.of(pageNo, size)).getContent());
     }
 
     @Override
-    public List<Series> getSeriesByGenre(String genre, int pageNo, int size) {
-        return seriesMongoRepository.findByGenre(genre, PageRequest.of(pageNo, size)).getContent();
+    public List<SeriesDTO> getSeriesByGenre(String genre, int pageNo, int size) {
+        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByGenre(genre, PageRequest.of(pageNo, size)).getContent());
     }
 
     @Override
-    public List<Series> getSeriesByRatingRange(Double fromRating, Double toRating,int pageNo, int size) {
-        return seriesMongoRepository.findByRatingBetween(fromRating, toRating, PageRequest.of(pageNo, size)).getContent();
+    public List<SeriesDTO> getSeriesByRatingRange(Double fromRating, Double toRating,int pageNo, int size) {
+        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByRatingBetween(fromRating, toRating, PageRequest.of(pageNo, size)).getContent());
     }
 
     @Override
-    public List<Series> getSeriesByFiltering(Double rating, String genre, int pageNo, int size) {
-        List<Series> listOfSeries = new ArrayList<>();
+    public List<SeriesDTO> getSeriesByFiltering(Double rating, String genre, int pageNo, int size) {
+        List<SeriesDTO> listOfSeries = new ArrayList<>();
         listOfSeries.addAll(getSeriesByRating(rating, pageNo, size));
         listOfSeries.addAll(getSeriesByGenre(genre, pageNo, size));
         return listOfSeries;
     }
 
     @Override
-    public void deleteAllSeries(List<Series> listOfSeries) {
-        seriesMongoRepository.deleteAll(listOfSeries);
+    public void deleteAllSeries(List<SeriesDTO> listOfSeriesDTO) {
+        seriesMongoRepository.deleteAll(SeriesMapper.toListSeries(listOfSeriesDTO));
     }
 }
