@@ -6,6 +6,7 @@ import com.pankaj.SeriesInfoService.model.Series;
 import com.pankaj.SeriesInfoService.repository.SeriesMongoRepository;
 import com.pankaj.SeriesInfoService.util.SeriesMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class SeriesServiceImpl implements ISeriesService{
     @Override
     public SeriesResponseDTO getAllSeriesByOffset(int pageNo, int size) {
         try {
-            return SeriesMapper.successListOfSeriesResponse(seriesMongoRepository.findAll(PageRequest.of(pageNo, size)).getContent());
+            return SeriesMapper.successListOfSeriesResponse(seriesMongoRepository.findAll(getPageOfGivenSizeNPageNo(pageNo, size)).getContent());
         }catch (IllegalArgumentException illegalArgumentException){
             return SeriesMapper.errorListOfSeriesResponse(illegalArgumentException);
         }
@@ -71,25 +72,25 @@ public class SeriesServiceImpl implements ISeriesService{
                     PageRequest.of(pageNo, size, Sort.by(Sort.Direction.ASC, "rating"))).getContent());
         }else {
             return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findAll(
-                    PageRequest.of(pageNo, size)).getContent());
+                    getPageOfGivenSizeNPageNo(pageNo, size)).getContent());
         }
     }
 
     @Override
     public List<SeriesDTO> getSeriesByRating(Double rating, int pageNo, int size) {
-        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByRating(rating, PageRequest.of(pageNo, size)).getContent());
+        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByRating(rating, getPageOfGivenSizeNPageNo(pageNo, size)).getContent());
     }
 
     @Override
     public List<SeriesDTO> getSeriesByGenre(String genre, int pageNo, int size) {
-        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByGenre(genre, PageRequest.of(pageNo, size)).getContent());
+        return SeriesMapper.toListSeriesDTO(seriesMongoRepository.findByGenre(genre, getPageOfGivenSizeNPageNo(pageNo, size)).getContent());
     }
 
     @Override
     public SeriesResponseDTO getSeriesByRatingRange(Double fromRating, Double toRating,int pageNo, int size) {
         try{
         return SeriesMapper.successListOfSeriesResponse(seriesMongoRepository.
-                findByRatingBetween(fromRating, toRating, PageRequest.of(pageNo, size)).getContent());
+                findByRatingBetween(fromRating, toRating, getPageOfGivenSizeNPageNo(pageNo, size)).getContent());
         }catch (IllegalArgumentException illegalArgumentException){
             return SeriesMapper.errorListOfSeriesResponse(illegalArgumentException);
         }
@@ -106,5 +107,10 @@ public class SeriesServiceImpl implements ISeriesService{
     @Override
     public void deleteAllSeries(List<SeriesDTO> listOfSeriesDTO) {
         seriesMongoRepository.deleteAll(SeriesMapper.toListSeries(listOfSeriesDTO));
+    }
+
+    @Override
+    public Pageable getPageOfGivenSizeNPageNo(int pageNo, int size) {
+        return PageRequest.of(pageNo, size);
     }
 }

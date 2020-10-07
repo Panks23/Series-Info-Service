@@ -3,6 +3,7 @@ package com.pankaj.SeriesInfoService.service;
 
 import com.pankaj.SeriesInfoService.dto.SeriesDTO;
 import com.pankaj.SeriesInfoService.dto.SeriesResponseDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,4 +35,6 @@ public interface ISeriesService {
         List<SeriesDTO> getSeriesByFiltering(Double rating, String genre, int pageNo, int size);
 
         void deleteAllSeries(List<SeriesDTO> listOfSeries);
+
+        Pageable getPageOfGivenSizeNPageNo(int pageNo, int size);
     }
